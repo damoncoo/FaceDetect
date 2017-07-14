@@ -1,0 +1,228 @@
+{
+  "useFaceNumber" : 0,
+  "position" : 4000,
+  "sections" : [
+    {
+      "filterlist" : [
+        "strongman",
+        "bizi",
+        "erduo",
+        "huzi",
+        "lian",
+        "tou"
+      ],
+      "tips" : "",
+      "sectionname" : "tuer",
+      "duration" : -1
+    }
+  ],
+  "filters" : [
+    {
+      "data" : {
+        "looping" : 1,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 46,
+        "width" : 103,
+        "alignX" : 51,
+        "type" : "D",
+        "audio" : "",
+        "frameDuration" : 50,
+        "alignAudio" : 0,
+        "folderName" : "bizi",
+        "height" : 73,
+        "frames" : 12,
+        "scaleWidth" : 312,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          46
+        ],
+        "leftIndex" : 0,
+        "triggerType" : 2
+      },
+      "name" : "bizi",
+      "type" : "dynamic",
+      "reload" : 1
+    },
+    {
+      "data" : {
+        "looping" : 1,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 26,
+        "width" : 285,
+        "alignX" : 141,
+        "type" : "D",
+        "audio" : "",
+        "frameDuration" : 50,
+        "alignAudio" : 1,
+        "folderName" : "huzi",
+        "height" : 76,
+        "frames" : 12,
+        "scaleWidth" : 232,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          82,
+          83
+        ],
+        "leftIndex" : 0,
+        "triggerType" : 2
+      },
+      "name" : "huzi",
+      "type" : "dynamic",
+      "reload" : 1
+    },
+    {
+      "data" : {
+        "looping" : 1,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 115,
+        "width" : 345,
+        "alignX" : 172,
+        "type" : "D",
+        "audio" : "",
+        "frameDuration" : 50,
+        "alignAudio" : 1,
+        "folderName" : "lian",
+        "height" : 251,
+        "frames" : 12,
+        "scaleWidth" : 196,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          44
+        ],
+        "leftIndex" : 0,
+        "triggerType" : 2
+      },
+      "name" : "lian",
+      "type" : "dynamic",
+      "reload" : 1
+    },
+    {
+      "data" : {
+        "looping" : 1,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 200,
+        "width" : 356,
+        "alignX" : 170,
+        "type" : "D",
+        "audio" : "",
+        "frameDuration" : 50,
+        "alignAudio" : 0,
+        "folderName" : "erduo",
+        "height" : 183,
+        "frames" : 12,
+        "scaleWidth" : 205,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          43
+        ],
+        "leftIndex" : 0,
+        "triggerType" : 2
+      },
+      "name" : "erduo",
+      "type" : "dynamic",
+      "reload" : 1
+    },
+    {
+      "data" : {
+        "audioPlayMode" : 0,
+        "resloadtype" : 0,
+        "glsl" : "glsl",
+        "foldername" : "strongman",
+        "resources" : [
+
+        ],
+        "params" : [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "pointIndexes" : [
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ],
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ]
+        ],
+        "maxPersonCount" : 2,
+        "triggerType" : 2,
+        "audio" : ""
+      },
+      "name" : "strongman",
+      "type" : "shape",
+      "reload" : 1
+    },
+    {
+      "data" : {
+        "looping" : 1,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 287,
+        "width" : 146,
+        "alignX" : 32,
+        "type" : "D",
+        "audio" : "",
+        "frameDuration" : 50,
+        "alignAudio" : 1,
+        "folderName" : "tou",
+        "height" : 126,
+        "frames" : 12,
+        "scaleWidth" : 250,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          43
+        ],
+        "leftIndex" : 0,
+        "triggerType" : 2
+      },
+      "name" : "tou",
+      "type" : "dynamic",
+      "reload" : 1
+    }
+  ],
+  "translateVersion" : 1,
+  "initsection" : "tuer",
+  "version" : 1,
+  "type" : "multi",
+  "statemachine" : [
+    {
+      "newsection" : "tuer",
+      "oldsection" : "tuer",
+      "triggerType" : 1111,
+      "sectionduration" : 0
+    }
+  ],
+  "name" : "900224_1",
+  "maxPersonCount" : 5
+}

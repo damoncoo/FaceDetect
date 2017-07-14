@@ -1,0 +1,67 @@
+local pi = require 'pi'
+local ent = require 'share://1.0/scripts/entity'
+local c = {}
+
+local frameUpdated = false
+
+function c:Accept(system, entity)
+    local mat = entity:GetCompByClassName("nspi::iMaterial2D")
+    if not mat then
+        return false
+    end
+
+    return ent.FindDynamicComp(entity, "@VideoFrame") ~= nil
+end
+
+function c:OnLoad(system)
+end
+
+function c:OnUpdate(system, delta)
+    local entities = system:GetEntities()
+    for i = 0, entities:GetCount() - 1 do
+        local entity = entities:GetItem(i)
+        self:OnUpdateEntity(system, entity)
+    end
+end
+
+function c:OnUpdateEntity(system, entity)
+    local mat = entity:GetCompByClassName("nspi::iMaterial2D")
+    local object = mat:GetColorTex()
+    if object == nil or frameUpdated then
+
+        local frame = system:GetScene():GetHID():GetFilteredFrame()
+        if frame then
+            local object = pi.CreateGraphicsObject()
+
+            local videoTex = frame:GetName()
+            pi.LogD(pi.GAME_TAG, "vedio_update, videoTex:"..videoTex)
+
+            object:SetName(videoTex)
+            mat:SetColorTex(object)
+        end
+
+        frameUpdated = false
+    end
+end
+
+function c:OnUnload(system)
+end
+
+function c:OnHIDEvent(system, event)
+    local id = event:GetID()
+
+    if id ~= pi.eHIDEvent_FilteredFrameChanged then
+        return false
+    end
+
+    frameUpdated = true
+    pi.LogD(pi.GAME_TAG, "video updater:frame updated")
+
+    return false
+end
+
+function c:OnRemoveEntity(system, entity)
+    pi.LogD(pi.GAME_TAG, "script OnRemoveEntity")
+end
+
+return c

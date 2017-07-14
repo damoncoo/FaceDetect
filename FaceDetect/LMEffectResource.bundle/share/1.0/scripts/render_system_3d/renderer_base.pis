@@ -1,0 +1,311 @@
+local pi = require 'pi'
+local table = require 'table'
+local shader = require 'share://1.0/scripts/render_system_3d/shader'
+local c = {}
+
+local mesh_program = 0
+
+local skel_program = 0
+
+local states = {}
+
+c.defMaskTex = pi.CreateColorTexture(pi.vec4(1, 1, 1, 0))
+
+local near = 1
+local far = 1000000
+local faceProjMatrix = pi.Project(0, 720, 0, 1280, near, far)
+
+
+---------------------------------------------------------------------------
+
+local function BuildVP(bounds, camera)
+    local mode = camera:GetMode()
+        
+    -- local near = camera->GetNear();
+    -- local far = camera->GetFar();
+        
+    local ratio = bounds:GetWidth() / bounds:GetHeight()
+    local width = ratio / 2
+    local height = 0.5
+        
+    local projMatrix = pi.Ortho(-width, width, -height, height, near, far)
+    if mode == pi.eCameraMode_Persp then
+        projMatrix = pi.Frustum(-width, width, -height, height, near, far)
+    end
+        
+    local viewMatrix = pi.LookAt(pi.vec3(0, 0, 5), pi.vec3(0, 0, 0), pi.vec3(0, 1, 0))
+    return projMatrix * viewMatrix;
+end
+
+local function GetFragState(modelLib, frag)
+    local mesh = frag:GetMesh()
+    if not mesh then
+        return nil
+    end
+
+    local skelLib = modelLib:GetSkeleton()
+
+    local material = frag:GetMaterial()
+
+    local state = 
+    {
+        mesh = mesh
+    }
+
+    local albedo = material:GetAlbedoTex()
+    if albedo then
+        state.diffuse = albedo:GetName()
+    end
+
+    local mask = material:GetMaskTex()
+    if mask then
+        state.mask = mask:GetName()
+    end
+
+    local pallette = pi.CreateMat4Array()
+   
+    if skelLib then
+        local bindPose = skelLib:GetBindPosePallette()
+        state.bindPose = bindPose
+        state.currPose = skelLib:GetPose():GetPallette()
+
+        pallette:Resize(bindPose:GetCount())
+
+        state.prog = skel_program
+
+        state.pallette = pallette
+    else
+        state.bindPose = pi.CreateMat4Array()
+        state.prog = mesh_program
+    end
+
+    state.pallette = pallette
+        
+    state.vao = pi.CreateVertexArray()
+    pi.BindVertexArray(state.vao)
+    
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, mesh:GetVBO())
+    pi.BindBuffer(pi.eGraphicsBuffer_Index, mesh:GetIBO())
+    
+    pi.EnableVertexAttr(0)
+    pi.EnableVertexAttr(1)
+    pi.EnableVertexAttr(2)
+    pi.EnableVertexAttr(3)
+    pi.EnableVertexAttr(4)
+        
+    pi.VertexAttr(0, pi.eAttrSize_Position, pi.eType_F32, pi.eAttrSize_Stride, pi.eAttrOffset_Position)
+    pi.VertexAttr(1, pi.eAttrSize_UV,       pi.eType_F32, pi.eAttrSize_Stride, pi.eAttrOffset_UV)
+    pi.VertexAttr(2, pi.eAttrSize_JIndex,   pi.eType_F32, pi.eAttrSize_Stride, pi.eAttrOffset_JIndex)
+    pi.VertexAttr(3, pi.eAttrSize_JWeight,  pi.eType_F32, pi.eAttrSize_Stride, pi.eAttrOffset_JWeight)
+    pi.VertexAttr(4, pi.eAttrSize_Normal,   pi.eType_F32, pi.eAttrSize_Stride, pi.eAttrOffset_Normal)
+        
+    pi.BindVertexArray(0);
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, 0)
+    pi.BindBuffer(pi.eGraphicsBuffer_Index, 0)
+
+    pi.LogD(pi.GAME_TAG, "frag state added")
+        
+    return state
+end
+
+local function GetState(entity, assetManager,  classLoader)
+    local name = entity:GetName()
+    local state = states[name]
+    if state then
+        return state
+    end
+
+    local model = entity:GetCompByClassName("nspi::iModel3D")
+    local modelLib = model:GetLibrary()
+    if not modelLib then
+        pi.LogI(pi.GAME_TAG, "model library not found")
+        return nil
+    end
+
+    state = {}
+
+    local frags = modelLib:GetFrags()
+    for i = 0, frags:GetCount() - 1 do
+        local frag = frags:GetItem(i)
+
+        local fragState = GetFragState(modelLib, frag)
+        if fragState then
+            table.insert(state, fragState)
+        end
+    end
+
+    states[name] = state
+    
+    return state
+end
+
+local function ReleaseState(state)
+    for i,s in ipairs(state) do
+        pi.LogD(pi.GAME_TAG, "Release vao:" .. s.vao)
+        pi.ReleaseGraphicsObject(s.vao)
+    end
+end
+
+----------------------------------------------------------------
+
+function c:OnRemoveEntity(system, entity)
+    local name = entity:GetName()
+
+    local state = states[name]
+    if state then
+        ReleaseState(state)
+    end
+
+    states[name] = nil
+end
+
+function c:OnLoad(system)
+    pi.LogD(pi.GAME_TAG, "rendersystem3d OnLoad")
+
+    local mesh_vs
+    local mesh_fs
+
+    local skel_vs
+    local skel_fs
+
+    local gType = pi.GetGraphicsType()
+	if gType ==  pi.eGraphicsBackend_OpenGL_ES3 then
+        pi.LogD(pi.GAME_TAG, "ES3")
+        
+        mesh_vs = shader.mesh.es3.vs
+        mesh_fs = shader.mesh.es3.fs
+
+        skel_vs = shader.skeleton.es3.vs
+        skel_fs = shader.skeleton.es3.fs
+    elseif gType ==  pi.eGraphicsBackend_OpenGL_ES2 then
+        pi.LogD(pi.GAME_TAG, "ES2")
+        
+        mesh_vs = shader.mesh.es2.vs
+        mesh_fs = shader.mesh.es2.fs
+
+        skel_vs = shader.skeleton.es2.vs
+        skel_fs = shader.skeleton.es2.fs
+    elseif gType == pi.eGraphicsBackend_OpenGL4 or gType == pi.eGraphicsBackend_OpenGL3 then
+        pi.LogD(pi.GAME_TAG, "OPENGL")
+        
+        mesh_vs = shader.mesh.gl.vs
+        mesh_fs = shader.mesh.gl.fs
+
+        skel_vs = shader.skeleton.gl.vs
+        skel_fs = shader.skeleton.gl.fs
+    end
+
+	mesh_program = pi.CreateProgram()
+    pi.CompileProgram(mesh_program, mesh_vs, mesh_fs)
+    if gType == pi.eGraphicsBackend_OpenGL_ES2 then
+        pi.BindVertexAttr(mesh_program, 0, "position")
+        pi.BindVertexAttr(mesh_program, 1, "uv")
+        pi.BindVertexAttr(mesh_program, 2, "jointIndices")
+        pi.BindVertexAttr(mesh_program, 3, "jointWeights")
+        pi.BindVertexAttr(mesh_program, 4, "normal")
+    end
+    pi.LogD(pi.GAME_TAG, "OnLoadCreate Program ID:"..mesh_program)
+    pi.LinkProgram(mesh_program)
+
+    skel_program = pi.CreateProgram()
+    pi.CompileProgram(skel_program, skel_vs, skel_fs)
+    if gType == pi.eGraphicsBackend_OpenGL_ES2 then
+        pi.BindVertexAttr(skel_program, 0, "position")
+        pi.BindVertexAttr(skel_program, 1, "uv")
+        pi.BindVertexAttr(skel_program, 2, "jointIndices")
+        pi.BindVertexAttr(skel_program, 3, "jointWeights")
+        pi.BindVertexAttr(skel_program, 4, "normal")
+    end
+    pi.LinkProgram(skel_program)
+    pi.LogD(pi.GAME_TAG, "OnLoadCreate Program ID:"..skel_program)
+end
+
+function c:OnUnload(system)
+	pi.LogD(pi.GAME_TAG, "rendersystem3d OnUnLoad")
+	pi.ReleaseGraphicsObject(mesh_program)
+    pi.ReleaseGraphicsObject(skel_program)
+
+    mesh_program = 0
+    skel_program = 0
+
+    for k,state in pairs(states) do
+        ReleaseState(state)
+    end
+end
+
+function c:OnHIDEvent(system, event)
+    return false
+end
+
+function c:OnResize(system, bounds)
+end
+
+function c:OnUpdate(system, delta)
+    local entities = system:GetEntities()
+    for i = 0, entities:GetCount() - 1 do
+        local entity = entities:GetItem(i)
+
+        pi.PushGroupMarker('[' .. entity:GetName() .. ']' .. "render_system_3d/renderer/OnRender")
+
+        self:OnUpdateEntity(system, entity)
+
+        pi.PopGroupMarker()
+    end
+end
+
+function c:OnUpdateEntity(system, entity)
+    local scene = system:GetScene()
+    local state = GetState(entity, scene:GetAssetManager(), scene:GetClassLoader())
+    if not state then
+        return
+    end
+
+    local camEntity = scene:GetFirstActiveCameraEntity()
+    if not camEntity then
+        return
+    end
+
+    local camera = camEntity:GetCompByClassName("nspi::iCamera")
+    if not camera then
+        return
+    end
+
+    local bounds = system:GetScene():GetBounds()
+    local vp = BuildVP(bounds, camera)
+
+    local mvp
+
+    local hid = scene:GetHID()
+        
+    local faceCap = entity:GetCompByClassName("nspi::iFaceCapture")
+    if faceCap then
+        local result = hid:GetFaceTrackerResult()
+        if not result then
+            return
+        end
+
+        local faceID = faceCap:GetFaceID()
+        if faceID >= result:GetFaceCount() then
+            return
+        end
+
+        mvp = faceProjMatrix * hid:GetFaceViewMatrix(faceID) * entity:EvaluateGlobalTransform()
+    else
+        mvp = vp * entity:EvaluateGlobalTransform()
+    end
+
+    for i,s in ipairs(state) do
+        self:Render(system, s, mvp)
+    end
+end
+
+function c:OnResize(system, bounds)
+    faceProjMatrix = pi.Project(bounds:GetX(), 
+                                bounds:GetX() + bounds:GetWidth(), 
+                                bounds:GetY(), 
+                                bounds:GetY() + bounds:GetHeight(), 
+                                near, 
+                                far) 
+end
+
+return c

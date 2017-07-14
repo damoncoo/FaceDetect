@@ -1,0 +1,70 @@
+local pi = require 'pi'
+
+local g = {}
+
+function g:MakeProgram(shader, graphic_type)
+    local vs
+    local fs
+
+    if graphic_type == pi.eGraphicsBackend_OpenGL_ES3 then
+        vs = shader.es3.vs
+        fs = shader.es3.fs
+    elseif graphic_type == pi.eGraphicsBackend_OpenGL_ES2 then
+        vs = shader.es2.vs
+        fs = shader.es2.fs
+    elseif graphic_type == pi.eGraphicsBackend_OpenGL4 or gType == pi.eGraphicsBackend_OpenGL3 then
+        vs = shader.gl.vs
+        fs = shader.gl.fs
+    end
+
+    pi.LogD(pi.GAME_TAG, "vs:"..vs)
+    pi.LogD(pi.GAME_TAG, "fs:"..fs)
+
+    local program = pi.CreateProgram()
+    pi.CompileProgram(program, vs, fs)
+    pi.LogD(pi.GAME_TAG, "create program:"..program)
+
+    return program
+end
+
+function g:MakeQuadVertex(size, scale)
+    local factor = scale
+    if not factor or factor <= 0 then
+        factor = 1
+    end
+
+    pi.LogD(pi.GAME_TAG, "VertexScale:"..factor)
+    local width = size:GetX() * scale
+    local height = size:GetY() * scale
+
+    -------------position----------uv-----
+    local vertices = 
+    {
+        0.0,    0.0,    0.0,    0.0, 0.0,
+        width,  0.0,    0.0,    1.0, 0.0,
+        0.0,    height, 0.0,    0.0, 1.0,
+        width,  0.0,    0.0,    1.0, 0.0,
+        0.0,    height, 0.0,    0.0, 1.0,
+        width,  height, 0.0,    1.0, 1.0
+    }
+
+    return vertices
+end
+
+function g:CreateIBO(count)
+    local indices = pi.CreateU16Array()
+    for i = 0, count -1 do
+        indices:PushBack(i)
+    end
+    local indicesMem = indices:ToMemory()
+
+    local ibo = pi.CreateBuffer()
+    pi.BindBuffer(pi.eGraphicsBuffer_Index, ibo)
+    pi.BufferData(pi.eGraphicsBuffer_Index, ibo, indicesMem:Size(), indicesMem)
+    pi.BindBuffer(pi.eGraphicsBuffer_Index, 0)
+
+    return ibo
+end
+
+
+return g

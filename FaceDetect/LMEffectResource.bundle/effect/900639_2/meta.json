@@ -1,0 +1,177 @@
+{
+  "useFaceNumber" : 0,
+  "position" : 4000,
+  "sections" : [
+    {
+      "filterlist" : [
+        "strongman",
+        "tou",
+        "bizi",
+        "huzi"
+      ],
+      "tips" : "",
+      "sectionname" : "a",
+      "duration" : -1
+    }
+  ],
+  "filters" : [
+    {
+      "data" : {
+        "triggerType" : 2,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 184,
+        "width" : 296,
+        "alignX" : 152,
+        "audio" : "",
+        "alignAudio" : 1,
+        "frameDuration" : 50,
+        "type" : "D",
+        "folderName" : "tou",
+        "frames" : 15,
+        "height" : 154,
+        "scaleWidth" : 144,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          43
+        ],
+        "leftIndex" : 0,
+        "looping" : 1
+      },
+      "name" : "tou",
+      "type" : "dynamic",
+      "reload" : 0
+    },
+    {
+      "data" : {
+        "triggerType" : 2,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 28,
+        "width" : 48,
+        "alignX" : 27,
+        "audio" : "",
+        "alignAudio" : 1,
+        "frameDuration" : 50,
+        "type" : "D",
+        "folderName" : "bizi",
+        "frames" : 15,
+        "height" : 43,
+        "scaleWidth" : 181,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          46
+        ],
+        "leftIndex" : 0,
+        "looping" : 1
+      },
+      "name" : "bizi",
+      "type" : "dynamic",
+      "reload" : 0
+    },
+    {
+      "data" : {
+        "triggerType" : 2,
+        "maxPersonCount" : 5,
+        "showUtilFinish" : 1,
+        "alignY" : 52,
+        "width" : 292,
+        "alignX" : 149,
+        "audio" : "",
+        "alignAudio" : 1,
+        "frameDuration" : 50,
+        "type" : "D",
+        "folderName" : "huzi",
+        "frames" : 15,
+        "height" : 111,
+        "scaleWidth" : 165,
+        "rightIndex" : 32,
+        "alignIndexLst" : [
+          46
+        ],
+        "leftIndex" : 0,
+        "looping" : 1
+      },
+      "name" : "huzi",
+      "type" : "dynamic",
+      "reload" : 0
+    },
+    {
+      "data" : {
+        "pointIndexes" : [
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ],
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ]
+        ],
+        "foldername" : "strongman",
+        "params" : [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "resources" : [
+
+        ],
+        "levels" : [
+          0,
+          0.2,
+          0.6,
+          1
+        ],
+        "resloadtype" : 0,
+        "triggerType" : 2,
+        "glsl" : "glsl",
+        "audio" : "",
+        "audioPlayMode" : 0,
+        "maxPersonCount" : 2
+      },
+      "name" : "strongman",
+      "type" : "shape",
+      "reload" : 0
+    }
+  ],
+  "translateVersion" : 1,
+  "initsection" : "a",
+  "version" : 1,
+  "type" : "multi",
+  "statemachine" : [
+    {
+      "newsection" : "a",
+      "oldsection" : "a",
+      "triggerType" : 4,
+      "sectionduration" : 1000000
+    }
+  ],
+  "name" : "900639_2",
+  "maxPersonCount" : 5
+}

@@ -1,0 +1,323 @@
+
+precision highp float;
+varying highp vec2 textureCoordinate;
+uniform sampler2D inputImageTexture;
+
+uniform lowp vec2 location0;
+uniform lowp vec2 location1;
+uniform lowp vec2 location2;
+uniform lowp vec2 location3;
+uniform lowp vec2 location4;
+uniform lowp vec2 location5;
+uniform lowp vec2 location6;
+uniform lowp vec2 location7;
+uniform lowp vec2 location8;
+uniform lowp vec2 location9;
+
+uniform lowp vec2 location10;
+uniform lowp vec2 location11;
+uniform lowp vec2 location12;
+uniform lowp vec2 location13;
+uniform lowp vec2 location14;
+uniform lowp vec2 location15;
+uniform lowp vec2 location16;
+uniform lowp vec2 location17;
+uniform lowp vec2 location18;
+uniform lowp vec2 location19;
+uniform lowp vec2 location20;
+uniform lowp vec2 location21;
+uniform lowp vec2 location22;
+uniform lowp vec2 location23;
+
+#define p74       location0
+#define p77       location1
+#define p9        location2
+#define p23       location3
+#define p46       location4
+#define p16       location5
+#define p4        location6
+#define p28       location7
+#define p13       location8
+#define p19       location9
+#define p82       location10
+#define p83       location11
+
+#define pp74       location12
+#define pp77       location13
+#define pp9        location14
+#define pp23       location15
+#define pp46       location16
+#define pp16       location17
+#define pp4        location18
+#define pp28       location19
+#define pp13       location20
+#define pp19       location21
+#define pp82       location22
+#define pp83       location23
+
+
+#define x_a 0.72
+#define y_a 1.28
+
+#define parameter 1.0
+#define glslname_weizheng 0.0
+
+vec4 blendNormal(vec4 c1, vec4 c2)
+{
+    vec4 outputColor;
+    outputColor.r = c1.r + c2.r * c2.a * (1.0 - c1.a);
+    outputColor.g = c1.g + c2.g * c2.a * (1.0 - c1.a);
+    outputColor.b = c1.b + c2.b * c2.a * (1.0 - c1.a);
+    outputColor.a = c1.a + c2.a * (1.0 - c1.a);
+    return outputColor;
+}
+
+vec2 faceStretch(vec2 textureCoord, vec2 originPosition, vec2 targetPosition, float radius, float curve)
+{
+    vec2 direction = targetPosition - originPosition;
+    float lengthA = length(direction);
+    if(lengthA<0.0001)   return direction;
+    float lengthB = min(lengthA, radius);
+    direction *= lengthB / lengthA;
+    float infect = distance(textureCoord, originPosition)/radius;
+    infect = clamp(1.0-infect,0.0,1.0);
+    infect = pow(infect, curve);
+
+    return direction * infect;
+}
+
+
+void main()
+{
+    gl_FragColor            = texture2D(inputImageTexture,textureCoordinate);
+    if (parameter < 0.001) {
+        return;
+    }
+
+    vec2 resultCoord        = textureCoordinate;
+    vec2 x_y_proportion     = vec2(x_a,y_a);
+    vec2 curCoord           = textureCoordinate*x_y_proportion;
+
+    if((p46.x>0.03) && (p46.y>0.03))
+    {
+//        vec2 resultCoord        = textureCoordinate;
+//        vec2 x_y_proportion     = vec2(x_a,y_a);
+//        vec2 curCoord           = textureCoordinate*x_y_proportion;
+
+        vec2 realP74    		= p74*x_y_proportion;
+        vec2 realP77    		= p77*x_y_proportion;
+        vec2 realP9     		= p9*x_y_proportion;
+        vec2 realP23    		= p23*x_y_proportion;
+        vec2 realP46    		= p46*x_y_proportion;
+        vec2 realP16    		= p16*x_y_proportion;
+        vec2 realP4             = p4*x_y_proportion;
+        vec2 realP28            = p28*x_y_proportion;
+        vec2 realP13            = p13*x_y_proportion;
+        vec2 realP19            = p19*x_y_proportion;
+        vec2 realP82            = p82*x_y_proportion;
+        vec2 realP83            = p83*x_y_proportion;
+
+        vec2 pChinCenter        = realP46+(realP16-realP46)*0.7;
+
+        vec2 srcPoint           = vec2(0.0);
+        vec2 dstPoint           = vec2(0.0);
+        vec2 offset             = vec2(0.0);
+
+        float radius = 0.0;
+        float weight = 1.0;
+        float currentDistance = 0.0;
+
+        float irisWidth         = distance(realP74,realP77);
+        float standardLength    = irisWidth;
+
+        //enlarge eyes
+        radius = standardLength*0.3;
+        currentDistance = distance(curCoord,realP74);
+        if (currentDistance<=radius) {
+            weight = pow(currentDistance/radius,0.15);
+            curCoord = realP74+(curCoord-realP74)*weight;
+        }
+
+        currentDistance = distance(curCoord,realP77);
+        if (currentDistance<=radius) {
+            weight = pow(currentDistance/radius,0.15);
+            curCoord = realP77+(curCoord-realP77)*weight;
+        }
+
+        //narrow nose
+        radius = standardLength*0.4;
+        srcPoint = realP82;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP83;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        //nose move down
+        radius = standardLength*0.7;
+        srcPoint = realP46;
+        dstPoint = srcPoint+(realP16-srcPoint)*0.03;//0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        //narrow face
+        radius = standardLength*1.0;
+        srcPoint = realP4;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP28;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        radius = standardLength*1.2;
+        srcPoint = realP9;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP23;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP13;
+        dstPoint = srcPoint+(pChinCenter-srcPoint)*0.08;//0.15095;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP19;
+        dstPoint = srcPoint+(pChinCenter-srcPoint)*0.08;//0.15095;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        radius = standardLength*1.5;
+        srcPoint = realP16;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.005;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        resultCoord = curCoord/x_y_proportion;
+
+        resultCoord = textureCoordinate+(resultCoord-textureCoordinate)*parameter;
+
+        gl_FragColor = texture2D(inputImageTexture, resultCoord);
+    }
+
+
+    if((pp46.x>0.03) && (pp46.y>0.03))
+    {
+        //        vec2 resultCoord        = textureCoordinate;
+        //        vec2 x_y_proportion     = vec2(x_a,y_a);
+        //        vec2 curCoord           = textureCoordinate*x_y_proportion;
+
+        vec2 realP74    		= pp74*x_y_proportion;
+        vec2 realP77    		= pp77*x_y_proportion;
+        vec2 realP9     		= pp9*x_y_proportion;
+        vec2 realP23    		= pp23*x_y_proportion;
+        vec2 realP46    		= pp46*x_y_proportion;
+        vec2 realP16    		= pp16*x_y_proportion;
+        vec2 realP4             = pp4*x_y_proportion;
+        vec2 realP28            = pp28*x_y_proportion;
+        vec2 realP13            = pp13*x_y_proportion;
+        vec2 realP19            = pp19*x_y_proportion;
+        vec2 realP82            = pp82*x_y_proportion;
+        vec2 realP83            = pp83*x_y_proportion;
+
+        vec2 pChinCenter        = realP46+(realP16-realP46)*0.7;
+
+        vec2 srcPoint           = vec2(0.0);
+        vec2 dstPoint           = vec2(0.0);
+        vec2 offset             = vec2(0.0);
+
+        float radius = 0.0;
+        float weight = 1.0;
+        float currentDistance = 0.0;
+
+        float irisWidth         = distance(realP74,realP77);
+        float standardLength    = irisWidth;
+
+        //enlarge eyes
+        radius = standardLength*0.3;
+        currentDistance = distance(curCoord,realP74);
+        if (currentDistance<=radius) {
+            weight = pow(currentDistance/radius,0.15);
+            curCoord = realP74+(curCoord-realP74)*weight;
+        }
+
+        currentDistance = distance(curCoord,realP77);
+        if (currentDistance<=radius) {
+            weight = pow(currentDistance/radius,0.15);
+            curCoord = realP77+(curCoord-realP77)*weight;
+        }
+
+        //narrow nose
+        radius = standardLength*0.4;
+        srcPoint = realP82;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP83;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        //nose move down
+        radius = standardLength*0.7;
+        srcPoint = realP46;
+        dstPoint = srcPoint+(realP16-srcPoint)*0.03;//0.05;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        //narrow face
+        radius = standardLength*1.0;
+        srcPoint = realP4;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP28;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        radius = standardLength*1.2;
+        srcPoint = realP9;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP23;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.015;//0.03;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP13;
+        dstPoint = srcPoint+(pChinCenter-srcPoint)*0.08;//0.15095;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        srcPoint = realP19;
+        dstPoint = srcPoint+(pChinCenter-srcPoint)*0.08;//0.15095;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        radius = standardLength*1.5;
+        srcPoint = realP16;
+        dstPoint = srcPoint+(realP46-srcPoint)*0.005;
+        offset   = faceStretch(curCoord,srcPoint,dstPoint,radius,1.0);
+        curCoord = curCoord - offset;
+
+        resultCoord = curCoord/x_y_proportion;
+
+        resultCoord = textureCoordinate+(resultCoord-textureCoordinate)*parameter;
+
+        gl_FragColor = texture2D(inputImageTexture, resultCoord);
+    }
+}

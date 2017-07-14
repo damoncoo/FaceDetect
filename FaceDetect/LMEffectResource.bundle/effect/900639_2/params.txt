@@ -1,0 +1,167 @@
+{
+    "filterlist": [
+        {
+            "data": {
+                "alignAudio": 1,
+                "alignIndexLst": [
+                    43
+                ],
+                "alignX": 152,
+                "alignY": 184,
+                "audio": "",
+                "folderName": "tou",
+                "frameDuration": 50,
+                "frames": 15,
+                "height": 154,
+                "leftIndex": 0,
+                "looping": 1,
+                "maxcount": 5,
+                "rightIndex": 32,
+                "scaleWidth": 144,
+                "showUtilFinish": 1,
+                "triggerType": 2,
+                "type": "D",
+                "width": 296
+            },
+            "name": "tou",
+            "reload": 0,
+            "type": "dsticker"
+        },
+        {
+            "data": {
+                "alignAudio": 1,
+                "alignIndexLst": [
+                    46
+                ],
+                "alignX": 27,
+                "alignY": 28,
+                "audio": "",
+                "folderName": "bizi",
+                "frameDuration": 50,
+                "frames": 15,
+                "height": 43,
+                "leftIndex": 0,
+                "looping": 1,
+                "maxcount": 5,
+                "rightIndex": 32,
+                "scaleWidth": 181,
+                "showUtilFinish": 1,
+                "triggerType": 2,
+                "type": "D",
+                "width": 48
+            },
+            "name": "bizi",
+            "reload": 0,
+            "type": "dsticker"
+        },
+        {
+            "data": {
+                "alignAudio": 1,
+                "alignIndexLst": [
+                    46
+                ],
+                "alignX": 149,
+                "alignY": 52,
+                "audio": "",
+                "folderName": "huzi",
+                "frameDuration": 50,
+                "frames": 15,
+                "height": 111,
+                "leftIndex": 0,
+                "looping": 1,
+                "maxcount": 5,
+                "rightIndex": 32,
+                "scaleWidth": 165,
+                "showUtilFinish": 1,
+                "triggerType": 2,
+                "type": "D",
+                "width": 292
+            },
+            "name": "huzi",
+            "reload": 0,
+            "type": "dsticker"
+        },
+        {
+            "data": {
+                "audio": "",
+                "foldername": "strongman",
+                "levels": [
+                    0,
+                    0.2,
+                    0.6,
+                    1
+                ],
+                "maxcount": 2,
+                "pointindexarray": [
+                    [
+                        5,
+                        16,
+                        27,
+                        46,
+                        74,
+                        77,
+                        84,
+                        90,
+                        10,
+                        22,
+                        13,
+                        19
+                    ],
+                    [
+                        5,
+                        16,
+                        27,
+                        46,
+                        74,
+                        77,
+                        84,
+                        90,
+                        10,
+                        22,
+                        13,
+                        19
+                    ]
+                ],
+                "reslist": [],
+                "resloadtype": 0,
+                "soundPlayMode": 0,
+                "timeparam": [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "triggerType": 2
+            },
+            "name": "strongman",
+            "reload": 0,
+            "type": "shapechange"
+        }
+    ],
+    "initsection": "a",
+    "sections": [
+        {
+            "duration": -1,
+            "filterlist": [
+                "strongman",
+                "tou",
+                "bizi",
+                "huzi"
+            ],
+            "sectionname": "a",
+            "tips": ""
+        }
+    ],
+    "statemachine": [
+        {
+            "newsection": "a",
+            "oldsection": "a",
+            "sectionduration": 1000000,
+            "triggerType": 4
+        }
+    ]
+}

@@ -1,0 +1,88 @@
+local pi = require 'pi'
+local base = require 'share://1.0/scripts/render_system_3d/renderer_base'
+local ent = require 'share://1.0/scripts/entity'
+
+local c = {}
+
+----------------------------------------------------------------
+
+function c:Accept(system, entity)
+    local model = entity:GetCompByClassName("nspi::iModel3D")
+    if not model then
+        return false
+    end
+    return ent.FindDynamicComp(entity, "@3D_DepthOnly") ~= nil
+end
+
+function c:Render(system, state, mvp)
+    local features = 0
+    features = bit.bor(features, pi.eGraphicsFeature_DepthTest, pi.eGraphicsFeature_CullFace, pi.eGraphicsFeature_Blend)
+
+    pi.EnableFeatures(features)
+
+    pi.ColorMask(false, false, false, false)
+
+    pi.BlendFunc(pi.eBlendFunc_SrcAlpha, pi.eBlendFunc_OneMinusSrcAlpha)
+
+    local prog = state.prog
+
+    pi.UseProgram(prog)
+
+    pi.UniformMat4f(prog, "MVPMatrix", mvp)
+        
+    pi.BindVertexArray(state.vao)
+
+    local pallette = state.pallette
+    if pallette and pallette:GetCount() > 0 then
+        pi.UniformMat4fv(prog, "JMs", pallette)
+    end
+
+    -- update skeleton matrix pallette
+    local bindPose = state.bindPose;
+    local currPose = state.currPose;
+    if bindPose ~= nil and currPose ~= nil then
+        for i = 0, bindPose:GetCount() - 1 do
+            local m = currPose:GetItem(i) * bindPose:GetItem(i)
+            pallette:SetItem(i, m)
+        end
+        pi.UniformMat4fv(prog, "JMs", pallette)
+    end
+
+    -- albedo
+    pi.ActiveTexture(0)
+    pi.Uniform1i(prog, "s_diffuse", 0)
+
+    local diffuse = state.diffuse
+    if diffuse then
+        pi.BindTexture(pi.eTexTarget_2D, diffuse)
+    else
+        pi.BindTexture(pi.eTexTarget_2D, 0)
+    end
+
+    -- transparent
+    pi.ActiveTexture(1)
+    pi.Uniform1i(prog, "s_transparent", 1)
+
+    local mask = state.mask
+    if mask then
+        pi.BindTexture(pi.eTexTarget_2D, mask)
+    else
+        pi.BindTexture(pi.eTexTarget_2D, self.defMaskTex)
+    end
+
+    pi.DrawElements(pi.eGraphicsDraw_Triangles, state.mesh:GetCount(), state.mesh:GetType())
+
+    pi.BindVertexArray(0)
+
+    pi.BindTexture(pi.eTexTarget_2D, 0)
+
+    pi.UseProgram(0)
+
+    pi.DisableFeatures(features)
+
+    pi.ColorMask(true, true, true, true)
+end
+
+setmetatable(c, { __index = base})
+
+return c

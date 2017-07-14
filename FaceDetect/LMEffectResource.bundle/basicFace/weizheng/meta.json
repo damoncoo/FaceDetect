@@ -1,0 +1,51 @@
+{
+  "name" : "weizheng",
+  "pointIndexes" : [
+    [
+      74,
+      77,
+      9,
+      23,
+      46,
+      16,
+      4,
+      28,
+      13,
+      19,
+      82,
+      83
+    ],
+    [
+      74,
+      77,
+      9,
+      23,
+      46,
+      16,
+      4,
+      28,
+      13,
+      19,
+      82,
+      83
+    ]
+  ],
+  "position" : 4000,
+  "version" : 1,
+  "type" : "shape",
+  "audio" : "",
+  "resources" : [
+
+  ],
+  "levels" : [
+    0,
+    0.2,
+    0.6,
+    1
+  ],
+  "translateVersion" : 1,
+  "glsl" : "glsl",
+  "useFaceNumber" : 0,
+  "audioPlayMode" : 0,
+  "maxPersonCount" : 2
+}

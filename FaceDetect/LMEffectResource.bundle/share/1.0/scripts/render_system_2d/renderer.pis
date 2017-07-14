@@ -1,0 +1,285 @@
+local pi = require 'pi'
+local ent = require 'share://1.0/scripts/entity'
+local graphic = require 'share://1.0/scripts/graphic'
+local math = require 'math'
+local shader = require 'share://1.0/scripts/render_system_2d/shader'
+
+
+local c = {}
+
+local g_program = 0
+
+local states = {}
+
+local renderScale = 1
+
+----------------------------------------------------------------
+
+function GetState(system, entity, name)
+    if states[name] then
+        return states[name]
+    end
+
+    local scene = system:GetScene()
+    local classLoader = scene:GetClassLoader()
+    local assetMgr = scene:GetAssetManager()
+
+    local vertStride = 20
+    local vertCount = 6
+
+    local vbo = pi.CreateBuffer()
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, vbo)
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, 0)
+
+    local vao = pi.CreateVertexArray()
+    pi.LogD(pi.GAME_TAG, "vao create: name:"..vao)
+    pi.BindVertexArray(vao)
+
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, vbo)
+
+    pi.EnableVertexAttr(0)
+    pi.EnableVertexAttr(1)
+
+    pi.VertexAttr(0, 3, pi.eType_F32, vertStride, 0)
+    pi.VertexAttr(1, 2, pi.eType_F32, vertStride, 12)
+
+    pi.BindVertexArray(0)
+
+    local transform = entity:GetCompByClassName("nspi::iTransform2D")
+    transform:SetRenderScale(renderScale)
+    local size = transform:GetSize()
+    local vertices = graphic:MakeQuadVertex(size, renderScale)
+    local vertStream = pi.CreateMemoryStream(vertCount * vertStride)
+
+    for i = 1, #vertices, 5 do
+    	vertStream:WriteF32(vertices[i])
+    	vertStream:WriteF32(vertices[i+1])
+    	vertStream:WriteF32(vertices[i+2])
+    	vertStream:WriteF32(vertices[i+3])
+    	vertStream:WriteF32(vertices[i+4])
+    end
+
+    local mem = vertStream:GetMemory()
+
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, vbo)
+    pi.BufferData(pi.eGraphicsBuffer_Vertex, vbo, mem:Size(), mem)
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, 0)
+
+    local mat = entity:GetCompByClassName("nspi::iMaterial2D")
+    local imageObject = mat:GetColorTex()
+
+    local state = {
+        imageObject = imageObject,
+        vertCount = vertCount,
+        vertStride = vertStride,
+        prog = g_program,
+        vbo = vbo,
+        vao = vao,
+        draw = true
+    }
+	states[name] = state
+
+    return states[name]
+end
+
+local function ReleaseState(state)
+    pi.ReleaseGraphicsObject(s.vbo)
+    pi.ReleaseGraphicsObject(s.vao)
+end
+
+----------------------------------------------------------------
+
+function c:Accept(system, entity)
+    local mat = entity:GetCompByClassName("nspi::iMaterial2D")
+    if not mat then
+        return false
+    end
+
+    local quad = entity:GetCompByClassName("nspi::iQuad")
+    if not quad then
+        return false
+    end
+
+    local trans = entity:GetCompByClassName("nspi::iTransform2D")
+    if not trans then
+        return false
+    end
+
+    return ent.FindDynamicComp(entity, "@2D") ~= nil
+end
+
+function c:OnResize(system, bounds)
+    local sceneBounds = system:GetScene():GetDesignSize()
+    local designWidth = sceneBounds:GetX()
+    local designHeight = sceneBounds:GetY()
+
+    local renderWidth = bounds:GetWidth()
+    local renderHeight = bounds:GetHeight()
+
+    local scaleX = renderWidth / designWidth
+    local scaleY = renderHeight / designHeight
+    renderScale = math.max(scaleX, scaleY)
+    pi.LogD(pi.GAME_TAG, "renderScale:"..renderScale)
+
+    local entities = system:GetEntities()
+    for i = 0, entities:GetCount() - 1 do
+        local entity = entities:GetItem(i)
+        self:OnResizeEntity(system, entity, renderScale)
+    end
+end
+
+
+function c:OnResizeEntity(system, entity, scale)
+    local name = entity:GetName()
+    pi.LogD(pi.GAME_TAG, "OnResize:"..name)
+
+    local state = states[name]
+    if not state then
+        pi.LogD(pi.GAME_TAG, "rendersystem2d state nil")
+        return
+    end
+
+    local transform = entity:GetCompByClassName("nspi::iTransform2D")
+    transform:SetRenderScale(scale)
+
+    ------  update translation ------
+    local translation = ent.CalculateAligmentTranslation(entity, scale)
+    transform:SetTranslation(translation)
+
+    ------  update vertext ------
+    local size = transform:GetSize()
+    local vertices = graphic:MakeQuadVertex(size, scale)
+    local vertStream = pi.CreateMemoryStream(state.vertCount * state.vertStride)
+
+    for i = 1, #vertices, 5 do
+        vertStream:WriteF32(vertices[i])
+        vertStream:WriteF32(vertices[i+1])
+        vertStream:WriteF32(vertices[i+2])
+        vertStream:WriteF32(vertices[i+3])
+        vertStream:WriteF32(vertices[i+4])
+    end
+
+    local mem = vertStream:GetMemory()
+
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, state.vbo)
+    pi.BufferSubData(pi.eGraphicsBuffer_Vertex, 0, mem:Size(), mem)
+    pi.BindBuffer(pi.eGraphicsBuffer_Vertex, 0)
+end
+
+function c:OnLoad(system)
+	pi.LogD(pi.GAME_TAG, "rendersystem2d OnLoad")
+    local graphic_type = pi.GetGraphicsType()
+    g_program = graphic:MakeProgram(shader, graphic_type)
+
+    if graphic_type ==  pi.eGraphicsBackend_OpenGL_ES2 then
+        pi.BindVertexAttr(g_program, 0, "position");
+        pi.BindVertexAttr(g_program, 1, "uv");
+    end
+    pi.LinkProgram(g_program)
+
+    pi.LogD(pi.GAME_TAG, "RenderSystem2D link program:"..g_program)
+end
+
+function c:OnUnLoad(system)
+	-- pi.LogI(pi.GAME_TAG, "rendersystem2d OnUnLoad")
+	pi.ReleaseGraphicsObject(g_program)
+    g_program = 0
+
+    for k,state in pairs(states) do
+        ReleaseState(state)
+    end
+end
+
+function c:OnHIDEvent(system, event)
+end
+
+function c:OnUpdate(system, delta)
+    local entities = system:GetEntities()
+    for i = 0, entities:GetCount() - 1 do
+        local entity = entities:GetItem(i)
+        self:OnUpdateEntity(system, entity)
+    end
+end
+
+function c:OnUpdateEntity(system, entity)
+	-- pi.LogI(pi.GAME_TAG, "rendersystem2d OnUpdateEntity")
+	local name = entity:GetName()
+
+    local state = GetState(system, entity, name)
+    if (not state) or (not state.draw) then
+    	pi.LogD(pi.GAME_TAG, "rendersystem2d state nil or draw false")
+        return
+    end
+
+    -------------------Build MVP-----------------
+    local mat2d = entity:GetCompByClassName("nspi::iMaterial2D")
+    if not mat2d:GetEnabled() then return end
+
+    local imageObject = mat2d:GetColorTex()
+
+    local texId = 0
+    if imageObject ~= nil then 
+        texId = imageObject:GetName()
+    else
+        pi.LogD(pi.GAME_TAG, "rendersystem2d, imageObject nil, entity:"..name)
+    end
+
+    local transform = entity:GetCompByClassName("nspi::iTransform2D")
+
+    local scene = system:GetScene()
+    local bounds = scene:GetBounds()
+	local projMatrix = pi.Ortho(0, bounds:GetWidth(), 0, bounds:GetHeight(), 1, 1000000)
+	local viewMatrix = pi.LookAt(pi.vec3(0, 0, 5), pi.vec3(0, 0, 0), pi.vec3(0, 1, 0))
+    local modelMatrix = transform:EvaluateMatrix()
+    local MVPMatrix = projMatrix * viewMatrix * modelMatrix
+
+    local texMatrix = mat2d:GetTexTransform()
+
+    -------------------OnDraw-----------------
+    local program = state.prog
+
+    pi.PushGroupMarker("render_system_2d/renderer/OnUpdateEntity: "..name)
+
+    pi.UseProgram(program)
+
+    pi.UniformMat4f(program, "MVPMatrix", MVPMatrix)
+
+    pi.UniformMat4f(program, "UVMatrix", texMatrix)
+
+    pi.EnableFeatures(pi.eGraphicsFeature_Blend)
+
+    pi.BlendFunc(pi.eBlendFunc_SrcAlpha, pi.eBlendFunc_OneMinusSrcAlpha)
+
+    pi.ActiveTexture(0)
+ 
+    pi.Uniform1i(program, "texture0", 0)
+
+    pi.BindTexture(pi.eTexTarget_2D, texId)
+
+    pi.BindVertexArray(state.vao)
+
+    pi.DrawArrays(pi.eGraphicsDraw_Triangles, 0, state.vertCount)
+
+    pi.BindVertexArray(0)
+
+    pi.BindTexture(pi.eTexTarget_2D, 0);
+
+    pi.UseProgram(0)
+
+    pi.DisableFeatures(pi.eGraphicsFeature_Blend);
+
+    pi.PopGroupMarker()
+end
+
+function c:OnRemoveEntity(system, entity)
+    local name = entity:GetName()
+
+    local state = states[name]
+    if state then
+        ReleaseState(state)
+    end
+
+    states[name] = nil
+end
+
+return c

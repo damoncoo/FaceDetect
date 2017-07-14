@@ -1,0 +1,69 @@
+local pi = require 'pi'
+
+local e = {}
+
+function e.FindDynamicComp(entity, name)
+    local comps = entity:GetComps()
+    for i = 0, comps:GetCount() - 1 do
+        local c = comps:GetItem(i)
+        local className = c:GetClass():GetFullName()
+        if className == "nspi::iTable" and c:Get("Type") == name then
+            return c
+        end
+    end
+
+    return nil
+end
+
+function e.CalculateAligmentTranslation(entity, scale)
+    local parentSize = pi.vec2(0.0, 0.0)
+    local transform = entity:GetCompByClassName("nspi::iTransform2D")
+    local parent = entity:GetCompByClassName("nspi::iSceneParent")
+
+    if not transform then return end
+
+    if parent then
+        local parentEntity = entity:GetScene():FindEntity(parentEntity:GetEntityName())
+        local parentTransform = parentEntity:GetCompByClassName("nspi::iTransform2D")
+        local parentScale = parentTransform:GetScale()
+        local parentSize = parentTransform:GetSize() * pi.vec2(parentScale:GetX(), parentScale:GetY()) * scale
+    else
+        local bound = entity:GetScene():GetBounds()
+        parentSize:SetX(bound:GetWidth())
+        parentSize:SetY(bound:GetHeight())
+    end
+
+    
+    local alignment = transform:GetAlignment()
+    local hAlig = alignment:GetX()
+    local vAlig = alignment:GetY()
+    local transX = parentSize:GetX()
+    local transY = parentSize:GetY()
+
+    if hAlig ==  pi.eAlignment_Left then
+        transX = transX * 0.0
+    elseif vAlig ==  pi.eAlignment_Center then
+        transX = transX * 0.5
+    elseif vAlig ==  pi.eAlignment_Right then
+        transX = transX * 1.0
+    else
+    	pi.LogI(pi.GAME_TAG, "not availabe horizontal alignment flag: "..hAlig)
+    	transX = 0.0
+    end
+
+    if vAlig ==  pi.eAlignment_Bottom then
+        transY = transY * 0.0
+    elseif vAlig ==  pi.eAlignment_Center then
+        transY = transY * 0.5
+    elseif vAlig ==  pi.eAlignment_Top then
+        transY = transY * 1.0
+    else
+    	pi.LogI(pi.GAME_TAG, "not availabe vertical alignment flag: "..vAlig)
+    	transY = 0.0
+    end
+
+
+    return pi.vec3(transX, transY, 0)
+end
+
+return e

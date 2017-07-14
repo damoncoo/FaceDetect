@@ -1,0 +1,87 @@
+{
+  "useFaceNumber" : 0,
+  "position" : 4000,
+  "sections" : [
+    {
+      "filterlist" : [
+        "strongman"
+      ],
+      "tips" : "女神的选择",
+      "sectionname" : "a",
+      "duration" : 2
+    }
+  ],
+  "filters" : [
+    {
+      "data" : {
+        "audioPlayMode" : 0,
+        "resloadtype" : 0,
+        "glsl" : "glsl",
+        "foldername" : "strongman",
+        "resources" : [
+
+        ],
+        "params" : [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "pointIndexes" : [
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ],
+          [
+            5,
+            16,
+            27,
+            46,
+            74,
+            77,
+            84,
+            90,
+            10,
+            22,
+            13,
+            19
+          ]
+        ],
+        "maxPersonCount" : 2,
+        "triggerType" : 2,
+        "audio" : ""
+      },
+      "name" : "strongman",
+      "type" : "shape",
+      "reload" : 0
+    }
+  ],
+  "translateVersion" : 1,
+  "initsection" : "a",
+  "version" : 1,
+  "type" : "multi",
+  "statemachine" : [
+    {
+      "newsection" : "a",
+      "oldsection" : "a",
+      "triggerType" : 4,
+      "sectionduration" : 1000000
+    }
+  ],
+  "name" : "900483_4",
+  "maxPersonCount" : 2
+}

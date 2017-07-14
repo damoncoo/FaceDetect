@@ -1,0 +1,47 @@
+{
+  "name" : "xianqi",
+  "pointIndexes" : [
+    [
+      9,
+      16,
+      23,
+      46,
+      74,
+      77,
+      84,
+      90,
+      13,
+      19
+    ],
+    [
+      9,
+      16,
+      23,
+      46,
+      74,
+      77,
+      84,
+      90,
+      13,
+      19
+    ]
+  ],
+  "position" : 4000,
+  "version" : 1,
+  "type" : "shape",
+  "audio" : "",
+  "resources" : [
+
+  ],
+  "levels" : [
+    0,
+    0.2,
+    0.6,
+    1
+  ],
+  "translateVersion" : 1,
+  "glsl" : "glsl",
+  "useFaceNumber" : 0,
+  "audioPlayMode" : 0,
+  "maxPersonCount" : 2
+}

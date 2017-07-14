@@ -1,0 +1,105 @@
+
+local c = {}
+
+-----------------OpenGL ES2 Shader --------------------------------------
+
+c.es2 = 
+{
+    vs = 
+    [==[
+        precision highp float;
+        attribute vec4 position;
+        attribute vec2 uv;
+        varying vec2 uv0; 
+        uniform mat4 MVPMatrix;
+        uniform mat4 UVMatrix;
+        void main(void)
+        {
+            gl_Position = MVPMatrix * position;
+            uv0 = (UVMatrix * vec4(uv.st ,1.0, 1.0)).xy ;
+        }
+    ]==],
+
+    fs =
+    [==[
+        precision highp float;
+        varying vec2 uv0;
+        uniform sampler2D texture0;
+        void main(void) 
+        {
+            vec4 color = texture2D(texture0, uv0);
+            gl_FragColor = color;
+        }
+    ]==]
+} 
+
+-----------------OpenGL ES3 Shader -------------------------------------
+
+c.es3 =
+{
+    vs = 
+    [==[
+        #version 300 es
+        precision highp float;
+        layout(location=0) in vec4 position;
+        layout(location=1) in vec2 uv;
+        out vec2 uv0; 
+        uniform mat4 MVPMatrix;
+        uniform mat4 UVMatrix;
+        void main(void)
+        {
+            gl_Position = MVPMatrix * position;
+            uv0 = (UVMatrix * vec4(uv.st ,1.0f, 1.0f)).xy ;
+        }
+    ]==],
+
+    fs = 
+    [==[
+        #version 300 es
+        precision highp float;
+        in vec2 uv0;
+        uniform sampler2D texture0;
+        layout(location=0) out vec4 fragColor;
+        void main(void) 
+        {
+            vec4 color = texture(texture0, uv0);
+            fragColor = color;
+        }
+    ]==]
+} 
+
+c.gl = 
+{
+    vs = 
+    [==[
+        #version 400
+        precision highp float;
+        layout(location=0) in vec4 position;
+        layout(location=1) in vec2 uv;
+        out vec2 uv0; 
+        uniform mat4 MVPMatrix;
+        uniform mat4 UVMatrix;
+        void main(void)
+        {
+            gl_Position = MVPMatrix * position;
+            uv0 = (UVMatrix * vec4(uv.st ,1.0f, 1.0f)).xy ;
+        }
+    ]==],
+
+    fs = 
+    [==[
+        #version 400
+        precision highp float;
+        in vec2 uv0;
+        uniform sampler2D texture0;
+        layout(location=0) out vec4 fragColor;
+        void main(void) 
+        {
+            vec4 color = texture(texture0, uv0);
+            fragColor = color;
+        }
+    ]==]
+} 
+
+return c
+

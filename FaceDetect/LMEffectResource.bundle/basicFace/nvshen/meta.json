@@ -1,0 +1,51 @@
+{
+  "name" : "nvshen",
+  "pointIndexes" : [
+    [
+      5,
+      16,
+      27,
+      46,
+      74,
+      77,
+      84,
+      90,
+      10,
+      22,
+      13,
+      19
+    ],
+    [
+      5,
+      16,
+      27,
+      46,
+      74,
+      77,
+      84,
+      90,
+      10,
+      22,
+      13,
+      19
+    ]
+  ],
+  "position" : 4000,
+  "version" : 1,
+  "type" : "shape",
+  "audio" : "",
+  "resources" : [
+
+  ],
+  "levels" : [
+    0,
+    0.2,
+    0.6,
+    1
+  ],
+  "translateVersion" : 1,
+  "glsl" : "glsl",
+  "useFaceNumber" : 0,
+  "audioPlayMode" : 0,
+  "maxPersonCount" : 2
+}
