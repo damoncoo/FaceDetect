@@ -123,9 +123,16 @@
 
 - (void)initRecorder
 {
-    
+    [self setUpDetecter];
+
     NSString *url = [[NSBundle mainBundle] pathForResource:@"LMEffectResource" ofType:@"bundle"];
     NSLog(@"url is %@",url);
+    
+    self.viewCanvas = [[CanvasView alloc] initWithFrame:self.cameraScreen.bounds] ;
+    self.viewCanvas.center = self.cameraScreen.layer.position;
+    self.viewCanvas.backgroundColor = [UIColor clearColor] ;
+    self.faceView = [[GPUImageUIElement alloc]initWithView:self.viewCanvas];
+ 
     
     self.recorder = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset640x480
                                                                       cameraPosition:AVCaptureDevicePositionFront];
@@ -133,12 +140,9 @@
     self.recorder.horizontallyMirrorFrontFacingCamera = YES;
     self.recorder.delegate = self;
     self.recorder.audioEncodingTarget = self.movieWriter;
-
-
-    [self setUpDetecter];
-    [self.view addSubview:self.cameraScreen];
-    [self.view bringSubviewToFront:self.viewCanvas];
+    [self.recorder startCameraCapture];
     
+    [self.view addSubview:self.cameraScreen];
     
     self.blendFilter = [[GPUImageAddBlendFilter alloc] init];//汇合的filter
     
@@ -146,47 +150,61 @@
     [self.recorder addTarget:self.currentFilter];
     [self.currentFilter addTarget:self.blendFilter];
     [self.currentFilter addTarget:self.cameraScreen];
-
+    
     //动画的链条
     [self.faceView addTarget:self.blendFilter];
-    
+
     //汇合的链条
     [self.blendFilter addTarget:self.movieWriter];
-
-    [self.recorder startCameraCapture];
+    
     [self.movieWriter startRecording];
+
+    [self.view addSubview:self.viewCanvas];
+    [self.view bringSubviewToFront:self.viewCanvas];
+
+    // 结束回调
+    __weak typeof (self) weakSelf = self;
+    [self.currentFilter setFrameProcessingCompletionBlock:^(GPUImageOutput *output, CMTime time) {
+        NSLog(@"update ui");
+        __strong typeof (self) strongSelf = weakSelf;
+        dispatch_async([GPUImageContext sharedContextQueue], ^{
+            [strongSelf.faceView updateWithTimestamp:time];
+        });
+    }];
+    
+
     
 //    return;
-//    
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        
-//        [self.movieWriter finishRecording];
-//        
-//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-//        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.moveSavePath))
-//        {
-//            [library writeVideoAtPathToSavedPhotosAlbum:[self.movieWriter valueForKey:@"movieURL"] completionBlock:^(NSURL *assetURL, NSError *error)
-//             {
-//                 dispatch_async(dispatch_get_main_queue(), ^{
-//                     
-//                     if (error) {
-//                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存失败" message:nil
-//                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                         [alert show];
-//                     } else {
-//                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存成功" message:nil
-//                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                         [alert show];
-//                     }
-//                 });
-//             }];
-//        }
-//        else {
-//            NSLog(@"error mssg)");
-//        }
-//
-//        
-//    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self.movieWriter finishRecording];
+        
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.moveSavePath))
+        {
+            [library writeVideoAtPathToSavedPhotosAlbum:[self.movieWriter valueForKey:@"movieURL"] completionBlock:^(NSURL *assetURL, NSError *error)
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     
+                     if (error) {
+                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存失败" message:nil
+                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                         [alert show];
+                     } else {
+                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存成功" message:nil
+                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                         [alert show];
+                     }
+                 });
+             }];
+        }
+        else {
+            NSLog(@"error mssg)");
+        }
+
+        
+    });
 }
 
 #pragma mark - 输出视图
@@ -196,8 +214,7 @@
 //        cameraScreen.backgroundColor = [UIColor redColor];
         cameraScreen.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
         _cameraScreen = cameraScreen;
-        
-        [self.currentGroup addTarget:cameraScreen];
+//        [self.currentGroup addTarget:cameraScreen];
     }
     return _cameraScreen;
 }
@@ -232,7 +249,6 @@
         unlink([self.moveSavePath UTF8String]);
         _movieWriter.encodingLiveVideo = YES;
         _movieWriter.hasAudioTrack = NO;
-        [self.currentGroup addTarget:_movieWriter];
     }
     return _movieWriter;
 }
@@ -260,11 +276,6 @@
         [self.faceDetector setParameter:@"1" forKey:@"align"];
     }
     
-    self.viewCanvas = [[CanvasView alloc] initWithFrame:self.cameraScreen.bounds] ;
-    self.viewCanvas.center = self.cameraScreen.layer.position;
-    self.viewCanvas.backgroundColor = [UIColor clearColor] ;
-    [self.view addSubview:self.viewCanvas];
-    self.faceView = [[GPUImageUIElement alloc]initWithView:self.viewCanvas];
 }
 
 #pragma mark - Delegate 
@@ -387,7 +398,7 @@
     }
     
     // 判断摄像头方向
-    BOOL isFrontCamera = self.recorder.frontFacingCameraPresent;
+    BOOL isFrontCamera = self.recorder.inputCamera.position == AVCaptureDevicePositionFront;
     
     // scale coordinates so they fit in the preview box, which may be scaled
     CGFloat widthScaleBy = self.cameraScreen.frame.size.width / faceImg.height;
@@ -470,17 +481,17 @@
             return;
         }
         
-//        if ([faceDic[@"face"] count]) {
-//            NSLog(@"result changed:%@",result);
-//            
-//            static dispatch_once_t onceToken;
-//            dispatch_once(&onceToken, ^{
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [[[UIAlertView alloc]initWithTitle:@"提示" message:@"已检测到人脸" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
-//                    
-//                } ) ;
-//            });
-//        }
+        if ([faceDic[@"face"] count]) {
+            NSLog(@"result changed:%@",result);
+            
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc]initWithTitle:@"提示" message:@"已检测到人脸" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+                    
+                } ) ;
+            });
+        }
         
         NSString *faceRet = [faceDic objectForKey:KCIFlyFaceResultRet];
         NSArray *faceArray = [faceDic objectForKey:KCIFlyFaceResultFace];

@@ -82,6 +82,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 - (UIImageView *)earsImageView {
     if (!_earsImageView) {
         _earsImageView = [[UIImageView alloc]init];
+        _earsImageView.backgroundColor = [UIColor clearColor] ;
         _earsImageView.frame = CGRectMake(0, 0, 178 * 1.3, 94 * 1.3);
         _earsImageView.image = [self earImages].firstObject;
         _earsImageView.animationImages = [self earImages];
@@ -92,6 +93,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 - (UIImageView *)beardImageView {
     if (!_beardImageView) {
         _beardImageView = [[UIImageView alloc]init];
+        _beardImageView.backgroundColor = [UIColor clearColor] ;
         _beardImageView.frame = CGRectMake(0, 0, 285 * 0.7, 76 * 0.7);
         _beardImageView.animationImages = [self beardImages];
     }
@@ -101,6 +103,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 - (UIImageView *)noseImageView {
     if (!_noseImageView) {
         _noseImageView = [[UIImageView alloc]init];
+        _noseImageView.backgroundColor = [UIColor clearColor] ;
         _noseImageView.frame = CGRectMake(0, 0, 52, 37);
         _noseImageView.animationImages = [self noseImages];
     }
@@ -123,6 +126,11 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 }
 
 - (void)drawPointWithPoints:(NSArray *)arrPersons{
+    
+    if (context) {
+        CGContextClearRect(context, self.bounds) ;
+    }
+    context = UIGraphicsGetCurrentContext();
     
     if (arrPersons.count) {
         for (FaceModel *face in arrPersons) {
@@ -164,19 +172,14 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
             huzi.center = noseBottom;
             huzi.transform = rotationTransform;
             
+            
             break;
         }
     }
     
-//    if (context) {
-//        CGContextClearRect(context, self.bounds) ;
-//    }
-//    context = UIGraphicsGetCurrentContext();
-//    
-//    
-//    [[UIColor greenColor] set];
-//    CGContextSetLineWidth(context, 2);
-//    CGContextStrokePath(context);
+    [[UIColor greenColor] set];
+    CGContextSetLineWidth(context, 2);
+    CGContextStrokePath(context);
 }
 
 - (void)hideView
