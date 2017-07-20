@@ -96,6 +96,8 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
         _beardImageView.backgroundColor = [UIColor clearColor] ;
         _beardImageView.frame = CGRectMake(0, 0, 285 * 0.7, 76 * 0.7);
         _beardImageView.animationImages = [self beardImages];
+        _beardImageView.image = [self beardImages].firstObject;
+
     }
     return _beardImageView;
 }
@@ -106,6 +108,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
         _noseImageView.backgroundColor = [UIColor clearColor] ;
         _noseImageView.frame = CGRectMake(0, 0, 52, 37);
         _noseImageView.animationImages = [self noseImages];
+        _noseImageView.image = [self noseImages].firstObject;
     }
     return _noseImageView;
 }
@@ -115,9 +118,9 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     [self addSubview:self.earsImageView];
     [self addSubview:self.beardImageView];
     [self addSubview:self.noseImageView];
-//    [self.earsImageView startAnimating];
-//    [self.beardImageView startAnimating];
-//    [self.noseImageView startAnimating];
+    [self.earsImageView startAnimating];
+    [self.beardImageView startAnimating];
+    [self.noseImageView startAnimating];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -190,7 +193,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 
 - (CGPoint)convertFicialModelToGpoint:(FacialPartModel *)model {
     
-    BOOL isFrontCamera = self.isFrontCamera = YES;
+    BOOL isFrontCamera = self.isFrontCamera;
     CGFloat widthScaleBy = 2/3.0;
     CGFloat heightScaleBy = 1/2.0;
     CGFloat x = [model.x floatValue];

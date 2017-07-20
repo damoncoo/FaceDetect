@@ -107,7 +107,7 @@
 @property (nonatomic, retain ) AVCaptureVideoPreviewLayer *previewLayer;
 //@property (nonatomic, strong ) UIView *previewView;
 
-@property (nonatomic , strong) GPUImageAddBlendFilter *blendFilter;
+@property (nonatomic , strong) GPUImageSourceOverBlendFilter *blendFilter;
 @property (nonatomic , strong) GPUImageUIElement *faceView;
 
 @end
@@ -144,7 +144,7 @@
     
     [self.view addSubview:self.cameraScreen];
     
-    self.blendFilter = [[GPUImageAddBlendFilter alloc] init];//汇合的filter
+    self.blendFilter = [[GPUImageSourceOverBlendFilter alloc] init];//汇合的filter
     
     //美颜的链条
     [self.recorder addTarget:self.currentFilter];
