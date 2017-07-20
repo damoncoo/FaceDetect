@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, IFlyFaceDirectionType) {
 /**
  *  @brief 图片数据
  */
-@property(nonatomic,retain)NSData* data;
+@property(nonatomic,strong)NSData* data;
 
 /**
  *  @brief 图片宽
@@ -41,5 +41,7 @@ typedef NS_ENUM(NSUInteger, IFlyFaceDirectionType) {
  *  @brief 图片方向
  */
 @property(nonatomic,assign)IFlyFaceDirectionType direction;
+
+@property(nonatomic,strong)UIImage *image;
 
 @end

@@ -115,10 +115,9 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     [self addSubview:self.earsImageView];
     [self addSubview:self.beardImageView];
     [self addSubview:self.noseImageView];
-    
-    [self.earsImageView startAnimating];
-    [self.beardImageView startAnimating];
-    [self.noseImageView startAnimating];
+//    [self.earsImageView startAnimating];
+//    [self.beardImageView startAnimating];
+//    [self.noseImageView startAnimating];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -178,7 +177,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     }
     
     [[UIColor greenColor] set];
-    CGContextSetLineWidth(context, 2);
+    CGContextSetLineWidth(context, 6);
     CGContextStrokePath(context);
 }
 

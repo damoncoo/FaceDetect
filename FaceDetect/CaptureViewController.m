@@ -325,6 +325,7 @@
     faceImage.width = width;
     faceImage.height = height;
     faceImage.direction = faceOrientation;
+    faceImage.image = [[[UIImage alloc]initWithCGImage:cgImage] copy];
     
     NSLog(@"width is %zu",width);
     NSLog(@"height is %zu",height);
