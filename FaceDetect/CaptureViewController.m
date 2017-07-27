@@ -130,6 +130,12 @@
     
     self.viewCanvas = [[CanvasView alloc] initWithFrame:self.cameraScreen.bounds] ;
     self.viewCanvas.center = self.cameraScreen.layer.position;
+
+//    CGRect rect = self.viewCanvas.frame;
+//    rect.size.height = rect.size.width * 4.0/3.0;
+//    rect.origin.y = 44;
+//    self.viewCanvas.frame = rect;
+    
     self.viewCanvas.backgroundColor = [UIColor clearColor] ;
     self.faceView = [[GPUImageUIElement alloc]initWithView:self.viewCanvas];
  
@@ -139,17 +145,19 @@
     self.recorder.outputImageOrientation = UIInterfaceOrientationPortrait;
     self.recorder.horizontallyMirrorFrontFacingCamera = YES;
     self.recorder.delegate = self;
-    self.recorder.audioEncodingTarget = self.movieWriter;
+    [self.recorder removeAudioInputsAndOutputs];
     [self.recorder startCameraCapture];
+    
+//    CIDetector
     
     [self.view addSubview:self.cameraScreen];
     
     self.blendFilter = [[GPUImageSourceOverBlendFilter alloc] init];//汇合的filter
     
     //美颜的链条
-    [self.recorder addTarget:self.currentFilter];
-    [self.currentFilter addTarget:self.blendFilter];
-    [self.currentFilter addTarget:self.cameraScreen];
+    [self.recorder addTarget:self.currentGroup];
+    [self.currentGroup addTarget:self.blendFilter];
+    [self.currentGroup addTarget:self.cameraScreen];
     
     //动画的链条
     [self.faceView addTarget:self.blendFilter];
@@ -164,7 +172,7 @@
 
     // 结束回调
     __weak typeof (self) weakSelf = self;
-    [self.currentFilter setFrameProcessingCompletionBlock:^(GPUImageOutput *output, CMTime time) {
+    [self.currentGroup setFrameProcessingCompletionBlock:^(GPUImageOutput *output, CMTime time) {
         NSLog(@"update ui");
         __strong typeof (self) strongSelf = weakSelf;
         dispatch_async([GPUImageContext sharedContextQueue], ^{

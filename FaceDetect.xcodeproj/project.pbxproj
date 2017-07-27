@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B03C04B160413AFCC62A525 /* libPods-FaceDetect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC2986ABDADDA48E86848CB8 /* libPods-FaceDetect.a */; };
+		C72923BC1F287B68003D12E9 /* XYTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = C72923BB1F287B68003D12E9 /* XYTimer.m */; };
+		C72923C91F29E55D003D12E9 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72923C81F29E55D003D12E9 /* ImageIO.framework */; };
+		C72923CE1F29F798003D12E9 /* FEImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72923CD1F29F798003D12E9 /* FEImageView.m */; };
+		C72923CF1F29F9A3003D12E9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72923CA1F29E61A003D12E9 /* AddressBook.framework */; };
 		C72F50421F17A26A00BABA30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C72F50411F17A26A00BABA30 /* main.m */; };
 		C72F50451F17A26A00BABA30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C72F50441F17A26A00BABA30 /* AppDelegate.m */; };
 		C72F50481F17A26A00BABA30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72F50471F17A26A00BABA30 /* ViewController.m */; };
@@ -254,6 +259,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		79FF5415A21AEF33C3DC9577 /* Pods-FaceDetect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceDetect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FaceDetect/Pods-FaceDetect.debug.xcconfig"; sourceTree = "<group>"; };
+		AC2986ABDADDA48E86848CB8 /* libPods-FaceDetect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FaceDetect.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFCB874DF6A97F2E098428E0 /* Pods-FaceDetect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FaceDetect.release.xcconfig"; path = "Pods/Target Support Files/Pods-FaceDetect/Pods-FaceDetect.release.xcconfig"; sourceTree = "<group>"; };
+		C72923BA1F287B68003D12E9 /* XYTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYTimer.h; sourceTree = "<group>"; };
+		C72923BB1F287B68003D12E9 /* XYTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYTimer.m; sourceTree = "<group>"; };
+		C72923C81F29E55D003D12E9 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		C72923CA1F29E61A003D12E9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		C72923CC1F29F798003D12E9 /* FEImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FEImageView.h; path = FaceDetect/FEImageView.h; sourceTree = SOURCE_ROOT; };
+		C72923CD1F29F798003D12E9 /* FEImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FEImageView.m; path = FaceDetect/FEImageView.m; sourceTree = SOURCE_ROOT; };
 		C72F503D1F17A26A00BABA30 /* FaceDetect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceDetect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C72F50411F17A26A00BABA30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C72F50431F17A26A00BABA30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -701,6 +715,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C72923CF1F29F9A3003D12E9 /* AddressBook.framework in Frameworks */,
+				C72F532E1F17AA9400BABA30 /* QuartzCore.framework in Frameworks */,
+				C72923C91F29E55D003D12E9 /* ImageIO.framework in Frameworks */,
 				C7D9B9311F17C85C0044C166 /* AssetsLibrary.framework in Frameworks */,
 				C7D9B4C01F17B10E0044C166 /* libz.tbd in Frameworks */,
 				C7D9B4BD1F17AF1F0044C166 /* SystemConfiguration.framework in Frameworks */,
@@ -712,9 +729,9 @@
 				C7D9B4AF1F17ACB90044C166 /* Accelerate.framework in Frameworks */,
 				C72F53341F17AAE700BABA30 /* CoreMotion.framework in Frameworks */,
 				C72F53301F17AAA800BABA30 /* MobileCoreServices.framework in Frameworks */,
-				C72F532E1F17AA9400BABA30 /* QuartzCore.framework in Frameworks */,
 				C72F532C1F17AA8C00BABA30 /* UIKit.framework in Frameworks */,
 				C72F52101F17A2E300BABA30 /* iflyMSC.framework in Frameworks */,
+				1B03C04B160413AFCC62A525 /* libPods-FaceDetect.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,6 +752,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		61157F9634FB29A2D74B265D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				79FF5415A21AEF33C3DC9577 /* Pods-FaceDetect.debug.xcconfig */,
+				BFCB874DF6A97F2E098428E0 /* Pods-FaceDetect.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		C72F50341F17A26A00BABA30 = {
 			isa = PBXGroup;
 			children = (
@@ -743,6 +769,7 @@
 				C72F50641F17A26A00BABA30 /* FaceDetectUITests */,
 				C72F503E1F17A26A00BABA30 /* Products */,
 				C72F532A1F17AA8B00BABA30 /* Frameworks */,
+				61157F9634FB29A2D74B265D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -764,6 +791,8 @@
 				C72F50441F17A26A00BABA30 /* AppDelegate.m */,
 				C72F50461F17A26A00BABA30 /* ViewController.h */,
 				C72F50471F17A26A00BABA30 /* ViewController.m */,
+				C72923BA1F287B68003D12E9 /* XYTimer.h */,
+				C72923BB1F287B68003D12E9 /* XYTimer.m */,
 				C72F50731F17A2E200BABA30 /* CaptureViewController.h */,
 				C72F50741F17A2E200BABA30 /* CaptureViewController.m */,
 				C7D9B95D1F1854430044C166 /* FaceModel.h */,
@@ -873,6 +902,8 @@
 				C72F53111F17AA0E00BABA30 /* UIImage+compress.m */,
 				C72F53121F17AA0E00BABA30 /* UIImage+Extensions.h */,
 				C72F53131F17AA0E00BABA30 /* UIImage+Extensions.m */,
+				C72923CC1F29F798003D12E9 /* FEImageView.h */,
+				C72923CD1F29F798003D12E9 /* FEImageView.m */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -902,6 +933,8 @@
 		C72F532A1F17AA8B00BABA30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C72923CA1F29E61A003D12E9 /* AddressBook.framework */,
+				C72923C81F29E55D003D12E9 /* ImageIO.framework */,
 				C7D9B9301F17C85C0044C166 /* AssetsLibrary.framework */,
 				C7D9B4BF1F17B10E0044C166 /* libz.tbd */,
 				C7D9B4BC1F17AF1F0044C166 /* SystemConfiguration.framework */,
@@ -918,6 +951,7 @@
 				C72F532F1F17AAA800BABA30 /* MobileCoreServices.framework */,
 				C72F532D1F17AA9400BABA30 /* QuartzCore.framework */,
 				C72F532B1F17AA8C00BABA30 /* UIKit.framework */,
+				AC2986ABDADDA48E86848CB8 /* libPods-FaceDetect.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1396,9 +1430,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C72F506A1F17A26A00BABA30 /* Build configuration list for PBXNativeTarget "FaceDetect" */;
 			buildPhases = (
+				0BA4BECC09E5C48CE08FE982 /* [CP] Check Pods Manifest.lock */,
 				C72F50391F17A26A00BABA30 /* Sources */,
 				C72F503A1F17A26A00BABA30 /* Frameworks */,
 				C72F503B1F17A26A00BABA30 /* Resources */,
+				E8C5AF193DEED53DEBD51F77 /* [CP] Embed Pods Frameworks */,
+				598F2ACBC51B73AB5AC3BADE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1526,6 +1563,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0BA4BECC09E5C48CE08FE982 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		598F2ACBC51B73AB5AC3BADE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceDetect/Pods-FaceDetect-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8C5AF193DEED53DEBD51F77 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FaceDetect/Pods-FaceDetect-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C72F50391F17A26A00BABA30 /* Sources */ = {
@@ -1683,6 +1768,7 @@
 				C7D9B8E51F17C0520044C166 /* GPUImagePerlinNoiseFilter.m in Sources */,
 				C7D9B8851F17C0520044C166 /* GPUImageBrightnessFilter.m in Sources */,
 				C7D9B8931F17C0520044C166 /* GPUImageColorMatrixFilter.m in Sources */,
+				C72923CE1F29F798003D12E9 /* FEImageView.m in Sources */,
 				C7D9B90E1F17C0520044C166 /* GPUImageThresholdedNonMaximumSuppressionFilter.m in Sources */,
 				C7D9B8B01F17C0520044C166 /* GPUImageGaussianBlurPositionFilter.m in Sources */,
 				C7D9B9571F18541E0044C166 /* JSONHTTPClient.m in Sources */,
@@ -1710,6 +1796,7 @@
 				C7D9B8F11F17C0520044C166 /* GPUImageRGBDilationFilter.m in Sources */,
 				C72F531E1F17AA0E00BABA30 /* CanvasView.m in Sources */,
 				C7D9B8A21F17C0520044C166 /* GPUImageEmbossFilter.m in Sources */,
+				C72923BC1F287B68003D12E9 /* XYTimer.m in Sources */,
 				C7D9B8A91F17C0520044C166 /* GPUImageFilterGroup.m in Sources */,
 				C7D9B9001F17C0520044C166 /* GPUImageSoftEleganceFilter.m in Sources */,
 				C7D9B9241F17C0520044C166 /* GPUImageMovieWriter.m in Sources */,
@@ -1880,6 +1967,7 @@
 		};
 		C72F506B1F17A26A00BABA30 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79FF5415A21AEF33C3DC9577 /* Pods-FaceDetect.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: junjie zhang (77RV482ZK2)";
@@ -1900,6 +1988,7 @@
 		};
 		C72F506C1F17A26A00BABA30 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BFCB874DF6A97F2E098428E0 /* Pods-FaceDetect.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: junjie zhang (77RV482ZK2)";

@@ -5,6 +5,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FEImageView.h"
 
 @interface CanvasView : UIView
 
@@ -14,11 +15,11 @@
 
 @property (nonatomic , strong) NSArray *arrPersons ;
 
-@property (nonatomic ,strong) UIImageView *earsImageView;
+@property (nonatomic ,strong) FEImageView *earsImageView;
 
-@property (nonatomic ,strong) UIImageView *noseImageView;
+@property (nonatomic ,strong) FEImageView *noseImageView;
 
-@property (nonatomic ,strong) UIImageView *beardImageView;
+@property (nonatomic ,strong) FEImageView *beardImageView;
 
 @property (nonatomic ,assign) BOOL isFrontCamera;
 

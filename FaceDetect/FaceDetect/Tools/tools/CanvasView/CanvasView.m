@@ -25,6 +25,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     CGContextRef context ;
 }
 
+
 - (NSArray *)earImages {
     static  NSMutableArray *erduos = nil;
     if (erduos) {
@@ -40,6 +41,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
         UIImage *eraImage = [UIImage imageWithData:data];
         [erduos addObject:eraImage];
     }
+    
     return erduos;
 }
 
@@ -81,36 +83,49 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 
 - (UIImageView *)earsImageView {
     if (!_earsImageView) {
-        _earsImageView = [[UIImageView alloc]init];
+        _earsImageView = [[FEImageView alloc]init];
         _earsImageView.backgroundColor = [UIColor clearColor] ;
         _earsImageView.frame = CGRectMake(0, 0, 178 * 1.3, 94 * 1.3);
-        _earsImageView.image = [self earImages].firstObject;
-        _earsImageView.animationImages = [self earImages];
+//        _earsImageView.image = [self earImages].firstObject;
+//        _earsImageView.animationImages = [self earImages];
+//        _earsImageView.backgroundColor = [UIColor redColor];
     }
     return _earsImageView;
 }
 
 - (UIImageView *)beardImageView {
     if (!_beardImageView) {
-        _beardImageView = [[UIImageView alloc]init];
+        _beardImageView = [[FEImageView alloc]init];
         _beardImageView.backgroundColor = [UIColor clearColor] ;
         _beardImageView.frame = CGRectMake(0, 0, 285 * 0.7, 76 * 0.7);
-        _beardImageView.animationImages = [self beardImages];
-        _beardImageView.image = [self beardImages].firstObject;
-
+//        _beardImageView.animationImages = [self beardImages];
+//        _beardImageView.image = [self beardImages].firstObject;
     }
     return _beardImageView;
 }
 
 - (UIImageView *)noseImageView {
     if (!_noseImageView) {
-        _noseImageView = [[UIImageView alloc]init];
+        _noseImageView = [[FEImageView alloc]init];
         _noseImageView.backgroundColor = [UIColor clearColor] ;
         _noseImageView.frame = CGRectMake(0, 0, 52, 37);
-        _noseImageView.animationImages = [self noseImages];
-        _noseImageView.image = [self noseImages].firstObject;
+//        _noseImageView.animationImages = [self noseImages];
+//        _noseImageView.image = [self noseImages].firstObject;
+        
     }
     return _noseImageView;
+}
+
+- (void)setImageView:(FEImageView *)imageView images:(NSArray *)images {
+    
+//    [UIImage create_SmallSize_GifDataWithImages:images duration:2 withSize:400 withQuality:0.7 withLogo:YES];
+//    NSData *emotionData = [NSData dataWithContentsOfFile:[UIImage gifDataPath_Small]];
+//    FLAnimatedImage *flImage = [[FLAnimatedImage alloc]initWithAnimatedGIFData:emotionData];
+//    imageView.animatedImage = flImage;
+    
+    imageView.images = images;
+    imageView.totalDuration = 1;
+    [imageView startAnimation];
 }
 
 - (void)addFacialViews
@@ -118,9 +133,14 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     [self addSubview:self.earsImageView];
     [self addSubview:self.beardImageView];
     [self addSubview:self.noseImageView];
-    [self.earsImageView startAnimating];
-    [self.beardImageView startAnimating];
-    [self.noseImageView startAnimating];
+    
+    [self setImageView:_noseImageView images:[self noseImages]];
+    [self setImageView:_beardImageView images:[self beardImages]];
+    [self setImageView:_earsImageView images:[self earImages]];
+    
+//    [self.earsImageView startAnimating];
+//    [self.beardImageView startAnimating];
+//    [self.noseImageView startAnimating];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -138,6 +158,10 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
         for (FaceModel *face in arrPersons) {
             [self addFacialViews];
             
+            _earsImageView.transform = CGAffineTransformIdentity;
+            _beardImageView.transform = CGAffineTransformIdentity;
+            _noseImageView.transform = CGAffineTransformIdentity;
+            
             UIImageView *ear = self.earsImageView;
             UIImageView *bizi = self.noseImageView;
             UIImageView *huzi = self.beardImageView;
@@ -152,8 +176,7 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
             _noseImageView.frame = CGRectMake(_noseImageView.frame.origin.x, _noseImageView.frame.origin.y, 0.5 * eyeDistance * 1, 0.5 * eyeDistance * 37/52 );
             
             CGFloat angle = angleBetweenPoints(eyeLeft, eyeRight);
-            CGAffineTransform rotationTransform = CGAffineTransformIdentity;
-            rotationTransform = CGAffineTransformMakeRotation(-angle);
+            CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(-angle);
             
             NSLog(@"radius == %f",angle);
             
@@ -186,14 +209,14 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
 
 - (void)hideView
 {
-    [self.earsImageView stopAnimating];
-    [self.beardImageView stopAnimating];
-    [self.noseImageView stopAnimating];
+//    [self.earsImageView stopAnimating];
+//    [self.beardImageView stopAnimating];
+//    [self.noseImageView stopAnimating];
 }
 
 - (CGPoint)convertFicialModelToGpoint:(FacialPartModel *)model {
     
-    BOOL isFrontCamera = self.isFrontCamera;
+    BOOL isFrontCamera = YES;
     CGFloat widthScaleBy = 2/3.0;
     CGFloat heightScaleBy = 1/2.0;
     CGFloat x = [model.x floatValue];
