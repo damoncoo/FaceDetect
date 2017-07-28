@@ -164,12 +164,13 @@
 
     //汇合的链条
     [self.blendFilter addTarget:self.movieWriter];
-    
-    [self.movieWriter startRecording];
 
     [self.view addSubview:self.viewCanvas];
     [self.view bringSubviewToFront:self.viewCanvas];
 
+    [self.movieWriter startRecording];
+
+    
     // 结束回调
     __weak typeof (self) weakSelf = self;
     [self.currentGroup setFrameProcessingCompletionBlock:^(GPUImageOutput *output, CMTime time) {
