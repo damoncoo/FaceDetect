@@ -125,7 +125,9 @@ CGFloat angleBetweenPoints(CGPoint first, CGPoint second) {
     
     imageView.images = images;
     imageView.totalDuration = 1;
-    [imageView startAnimation];
+    if (!imageView.isAnimating) {
+        [imageView startAnimation];
+    }
 }
 
 - (void)addFacialViews
