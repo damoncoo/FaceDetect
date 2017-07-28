@@ -36,6 +36,7 @@
 		C72F532E1F17AA9400BABA30 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72F532D1F17AA9400BABA30 /* QuartzCore.framework */; };
 		C72F53301F17AAA800BABA30 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72F532F1F17AAA800BABA30 /* MobileCoreServices.framework */; };
 		C72F53341F17AAE700BABA30 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72F53331F17AAE700BABA30 /* CoreMotion.framework */; };
+		C7C3DAA71F2B734600E9561C /* FEImageBind.m in Sources */ = {isa = PBXBuildFile; fileRef = C7C3DAA61F2B734600E9561C /* FEImageBind.m */; };
 		C7D9B4AF1F17ACB90044C166 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D9B4AE1F17ACB90044C166 /* Accelerate.framework */; };
 		C7D9B4B11F17AE0D0044C166 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D9B4B01F17AE0D0044C166 /* CFNetwork.framework */; };
 		C7D9B4B31F17AE910044C166 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C7D9B4B21F17AE910044C166 /* libc++.tbd */; };
@@ -313,6 +314,8 @@
 		C72F532F1F17AAA800BABA30 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		C72F53311F17AABC00BABA30 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C72F53331F17AAE700BABA30 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C7C3DAA51F2B734600E9561C /* FEImageBind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEImageBind.h; sourceTree = "<group>"; };
+		C7C3DAA61F2B734600E9561C /* FEImageBind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEImageBind.m; sourceTree = "<group>"; };
 		C7D9B4AC1F17AC870044C166 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		C7D9B4AE1F17ACB90044C166 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C7D9B4B01F17AE0D0044C166 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -797,6 +800,8 @@
 				C72F50741F17A2E200BABA30 /* CaptureViewController.m */,
 				C7D9B95D1F1854430044C166 /* FaceModel.h */,
 				C7D9B95E1F1854430044C166 /* FaceModel.m */,
+				C7C3DAA51F2B734600E9561C /* FEImageBind.h */,
+				C7C3DAA61F2B734600E9561C /* FEImageBind.m */,
 				C7D9B9321F17D2340044C166 /* LMEffectResource.bundle */,
 				C7D9B6FA1F17C0510044C166 /* GPUImage */,
 				C72F50751F17A2E200BABA30 /* FaceDetect */,
@@ -1735,6 +1740,7 @@
 				C7D9B8F91F17C0520044C166 /* GPUImageSharpenFilter.m in Sources */,
 				C7D9B9141F17C0520044C166 /* GPUImageTwoInputCrossTextureSamplingFilter.m in Sources */,
 				C7D9B8F01F17C0520044C166 /* GPUImageRGBClosingFilter.m in Sources */,
+				C7C3DAA71F2B734600E9561C /* FEImageBind.m in Sources */,
 				C7D9B8AA1F17C0520044C166 /* GPUImageFilterPipeline.m in Sources */,
 				C7D9B8D11F17C0520044C166 /* GPUImageLuminosity.m in Sources */,
 				C7D9B90C1F17C0520044C166 /* GPUImageThreeInputFilter.m in Sources */,
