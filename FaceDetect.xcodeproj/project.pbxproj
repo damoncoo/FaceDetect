@@ -1985,7 +1985,7 @@
 				);
 				INFOPLIST_FILE = FaceDetect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = c.FaceDetect;
+				PRODUCT_BUNDLE_IDENTIFIER = facedetect.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Id";
@@ -2006,7 +2006,7 @@
 				);
 				INFOPLIST_FILE = FaceDetect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = c.FaceDetect;
+				PRODUCT_BUNDLE_IDENTIFIER = facedetect.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "bc96ec12-4931-45e3-ab66-876ef9913bfe";
 				PROVISIONING_PROFILE_SPECIFIER = "Wildcard Id";

@@ -10,6 +10,9 @@
 
 @interface ViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIView *rotationView;
+
+@property (weak, nonatomic) IBOutlet UILabel *frameLabel;
 
 @end
 

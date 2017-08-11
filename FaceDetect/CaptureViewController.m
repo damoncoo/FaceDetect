@@ -109,6 +109,8 @@
 
 @property (nonatomic , strong) GPUImageSourceOverBlendFilter *blendFilter;
 @property (nonatomic , strong) GPUImageUIElement *faceView;
+@property (nonatomic ,strong) UIView *preView;
+
 
 @end
 
@@ -124,18 +126,19 @@
 - (void)initRecorder
 {
     [self setUpDetecter];
+    
+//    self.preview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DEVICE_SIZE.width, DEVICE_SIZE.width+kFixHeight)];
+//    self.preview .clipsToBounds = YES;
+//    self.preview .backgroundColor = [UIColor clearColor];
+//    [self.view addSubview:self.preView];
+    
+    
+    [self.view addSubview:self.cameraScreen];
 
     NSString *url = [[NSBundle mainBundle] pathForResource:@"LMEffectResource" ofType:@"bundle"];
     NSLog(@"url is %@",url);
     
-    self.viewCanvas = [[CanvasView alloc] initWithFrame:self.cameraScreen.bounds] ;
-    self.viewCanvas.center = self.cameraScreen.layer.position;
-
-//    CGRect rect = self.viewCanvas.frame;
-//    rect.size.height = rect.size.width * 4.0/3.0;
-//    rect.origin.y = 44;
-//    self.viewCanvas.frame = rect;
-    
+    self.viewCanvas = [[CanvasView alloc] initWithFrame:self.cameraScreen.frame] ;
     self.viewCanvas.backgroundColor = [UIColor clearColor] ;
     self.faceView = [[GPUImageUIElement alloc]initWithView:self.viewCanvas];
  
@@ -150,7 +153,6 @@
     
 //    CIDetector
     
-    [self.view addSubview:self.cameraScreen];
     
     self.blendFilter = [[GPUImageSourceOverBlendFilter alloc] init];//汇合的filter
     
@@ -168,7 +170,7 @@
     [self.view addSubview:self.viewCanvas];
     [self.view bringSubviewToFront:self.viewCanvas];
 
-    [self.movieWriter startRecording];
+//    [self.movieWriter startRecording];
 
     
     // 结束回调
@@ -184,42 +186,42 @@
 
     
 //    return;
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [self.movieWriter finishRecording];
-        
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.moveSavePath))
-        {
-            [library writeVideoAtPathToSavedPhotosAlbum:[self.movieWriter valueForKey:@"movieURL"] completionBlock:^(NSURL *assetURL, NSError *error)
-             {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     
-                     if (error) {
-                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存失败" message:nil
-                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                         [alert show];
-                     } else {
-                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存成功" message:nil
-                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                         [alert show];
-                     }
-                 });
-             }];
-        }
-        else {
-            NSLog(@"error mssg)");
-        }
-
-        
-    });
+//    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        
+//        [self.movieWriter finishRecording];
+//        
+//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+//        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(self.moveSavePath))
+//        {
+//            [library writeVideoAtPathToSavedPhotosAlbum:[self.movieWriter valueForKey:@"movieURL"] completionBlock:^(NSURL *assetURL, NSError *error)
+//             {
+//                 dispatch_async(dispatch_get_main_queue(), ^{
+//                     
+//                     if (error) {
+//                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存失败" message:nil
+//                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                         [alert show];
+//                     } else {
+//                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"视频保存成功" message:nil
+//                                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                         [alert show];
+//                     }
+//                 });
+//             }];
+//        }
+//        else {
+//            NSLog(@"error mssg)");
+//        }
+//
+//        
+//    });
 }
 
 #pragma mark - 输出视图
 - (GPUImageView *)cameraScreen {
     if (!_cameraScreen) {
-        GPUImageView *cameraScreen = [[GPUImageView alloc] initWithFrame:CGRectMake(0, kFixHeight, DEVICE_SIZE.width, DEVICE_SIZE.width)];
+        GPUImageView *cameraScreen = [[GPUImageView alloc] initWithFrame:CGRectMake(0, 44, DEVICE_SIZE.width, DEVICE_SIZE.width * 4.0/3.0)];
 //        cameraScreen.backgroundColor = [UIColor redColor];
         cameraScreen.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
         _cameraScreen = cameraScreen;
