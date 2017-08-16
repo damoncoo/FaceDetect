@@ -572,10 +572,10 @@
 
 
 - (void) hideFace {
-//    if (!self.viewCanvas.hidden) {
-//        self.viewCanvas.hidden = YES ;
-//        [self.viewCanvas hideView];
-//    }
+    if (!self.viewCanvas.hidden) {
+        self.viewCanvas.hidden = YES ;
+        [self.viewCanvas hideView];
+    }
 }
 
 #pragma mark - CaptureManagerDelegate
